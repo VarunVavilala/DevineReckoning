@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divine Reckoning — 6th Semester Jury Presentation</title>
+<!--
+  ==========================================================================
+  DIVINE RECKONING — JURY PRESENTATION  (single HTML file, no build needed)
+  Sections: Cover · Overview · Concept · Workflow · Reflection · Team
+  ==========================================================================
+  Keep this file NEXT TO the "assets" folder. Open it in any browser.
+
+  EDIT TAGS (Ctrl+F):
+    [EDIT:TEAM]    names / roll numbers
+    [EDIT:TEXT]    copy you may want to personalise
+    [EDIT:IMAGE]   image paths (all images live in assets/hero, assets/final, assets/process)
+    [EDIT:STATUS]  badge: implemented | workflow | concept | experiment | planned
+    [EDIT:DATA]    the JavaScript arrays STAGES / WF / JOURNEY control the timeline,
+                   the 14-stage workflow and the development journey.
+
+  BADGES: "IMPLEMENTED" = visible in your screenshots. "DEVELOPMENT WORKFLOW"
+  = described in the concept guide but not shown in a screenshot. Change a
+  badge only if it is true.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ==========================================================================
+   1. DESIGN TOKENS  [EDIT:CONFIG] change colours here
+   ========================================================================== */
+:root{
+  --ink:#070604; --ink-2:#0d0a07; --stone:#17120d; --stone-2:#241c14; --stone-3:#3a2f24;
+  --gold:#c9922a; --gold-bright:#f0b84a; --gold-dim:#8a6118; --bronze:#8c5a2b;
+  --amber:#d97a1f; --ember:#c04a1a; --divine:#7eb8d4; --divine-dim:#3a6f88; --moss:#6f9a55;
+  --text:#ecdcb9; --muted:#a3926f; --faint:#6f6247;
+  --line:rgba(201,146,42,.28); --line-soft:rgba(201,146,42,.12);
+  --serif:'Cinzel','Trajan Pro',Georgia,serif;
+  --body:'Crimson Pro',Georgia,'Times New Roman',serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --wrap:min(1520px,92vw);
+  --nav-h:56px;
+}
+
+/* ==========================================================================
+   2. RESET / BASE
+   ========================================================================== */
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:var(--nav-h)}
+body{background:var(--ink);color:var(--text);font-family:var(--body);font-size:clamp(17px,1.05vw + 8px,22px);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit}
+p{margin-bottom:1rem}
+::selection{background:var(--gold);color:var(--ink)}
+/* film grain */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:900;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
+.wrap{width:var(--wrap);margin:0 auto}
+.mono{font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;font-size:.62em}
+
+/* ==========================================================================
+   3. NAVIGATION + PROGRESS
+   ========================================================================== */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--gold-dim),var(--gold-bright));z-index:1002;box-shadow:0 0 12px var(--gold)}
+nav.top{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:1000;display:flex;align-items:center;gap:.25rem;padding:0 2vw;
+  background:linear-gradient(180deg,rgba(7,6,4,.96),rgba(7,6,4,.82));border-bottom:1px solid var(--line-soft);backdrop-filter:blur(8px);
+  transform:translateY(-100%);transition:transform .5s ease}
+nav.top.show{transform:none}
+nav.top .brand{font-family:var(--serif);font-size:.72rem;letter-spacing:.28em;color:var(--gold);text-decoration:none;margin-right:1.6rem;white-space:nowrap}
+nav.top .links{display:flex;flex:1;overflow-x:auto;scrollbar-width:none}
+nav.top .links::-webkit-scrollbar{display:none}
+nav.top a.l{font-family:var(--serif);font-size:.6rem;letter-spacing:.16em;color:var(--muted);text-decoration:none;padding:0 .8rem;height:var(--nav-h);display:flex;align-items:center;position:relative;white-space:nowrap;transition:color .25s}
+nav.top a.l::after{content:'';position:absolute;left:.8rem;right:.8rem;bottom:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .35s}
+nav.top a.l:hover,nav.top a.l.active{color:var(--gold-bright)}
+nav.top a.l.active::after{transform:scaleX(1)}
+#fsBtn{background:none;border:1px solid var(--line);color:var(--gold);font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;padding:.45rem .8rem;cursor:pointer;margin-left:.6rem;white-space:nowrap}
+#fsBtn:hover{background:var(--gold);color:var(--ink)}
+#toTop{position:fixed;right:2vw;bottom:2vw;width:46px;height:46px;border:1px solid var(--line);background:rgba(7,6,4,.8);color:var(--gold);font-size:1.1rem;cursor:pointer;z-index:1000;opacity:0;pointer-events:none;transition:.3s}
+#toTop.show{opacity:1;pointer-events:auto}
+#toTop:hover{background:var(--gold);color:var(--ink)}
+
+/* ==========================================================================
+   4. SHARED COMPONENTS
+   ========================================================================== */
+section.chapter{position:relative;padding:clamp(5rem,10vw,9rem) 0;border-top:1px solid var(--line-soft)}
+.kicker{font-family:var(--mono);font-size:.62rem;letter-spacing:.42em;color:var(--gold-dim);text-transform:uppercase;display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem}
+.kicker::before{content:'';width:48px;height:1px;background:var(--gold-dim)}
+h2.title{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,4.4vw,4.2rem);line-height:1.08;letter-spacing:.03em;color:var(--text);margin-bottom:1.4rem}
+h2.title em{font-style:normal;color:var(--gold)}
+.lede{font-size:clamp(1.05rem,1.5vw,1.45rem);color:var(--muted);max-width:60ch;font-style:italic;line-height:1.6}
+h3.sub{font-family:var(--serif);font-weight:500;font-size:clamp(1.2rem,1.8vw,1.8rem);letter-spacing:.08em;color:var(--gold-bright);margin-bottom:.8rem}
+.bignum{font-family:var(--serif);font-weight:900;font-size:clamp(4rem,10vw,10rem);line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(201,146,42,.35);position:absolute;right:2vw;top:2.5rem;pointer-events:none;user-select:none}
+
+/* status badge */
+.badge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;padding:.28rem .7rem;border:1px solid;vertical-align:middle}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.badge[data-status=implemented]{color:#9ccf7f;border-color:rgba(156,207,127,.5);background:rgba(111,154,85,.1)}
+.badge[data-status=workflow]{color:var(--gold-bright);border-color:rgba(201,146,42,.5);background:rgba(201,146,42,.08)}
+.badge[data-status=concept]{color:var(--divine);border-color:rgba(126,184,212,.5);background:rgba(126,184,212,.08)}
+.badge[data-status=experiment]{color:#d99ae0;border-color:rgba(217,154,224,.45);background:rgba(217,154,224,.07)}
+.badge[data-status=planned]{color:#d9856a;border-color:rgba(217,133,106,.5);background:rgba(192,74,26,.08)}
+
+/* image frame with graceful placeholder */
+.frame{position:relative;overflow:hidden;background:var(--stone);border:1px solid var(--line-soft);cursor:zoom-in;aspect-ratio:16/9}
+.frame.r43{aspect-ratio:4/3}.frame.r21{aspect-ratio:21/9}.frame.r11{aspect-ratio:1/1}.frame.r916{aspect-ratio:9/16}
+.frame img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.7,.2,1),filter .6s}
+.frame:hover img{transform:scale(1.045)}
+.frame::after{content:'';position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 90px rgba(0,0,0,.45)}
+.frame figcaption{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:2.2rem 1.2rem .9rem;background:linear-gradient(0deg,rgba(7,6,4,.92),transparent);
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-bright);transform:translateY(0);transition:.4s}
+.frame .corner{position:absolute;width:18px;height:18px;border:1px solid var(--gold);opacity:.55;z-index:3;transition:.4s}
+.frame .corner.tl{top:10px;left:10px;border-right:0;border-bottom:0}.frame .corner.br{bottom:10px;right:10px;border-left:0;border-top:0}
+.frame:hover .corner{width:34px;height:34px;opacity:1}
+/* placeholder (shown only when image fails) */
+.frame.missing{cursor:default;background:
+  repeating-linear-gradient(135deg,rgba(201,146,42,.05) 0 12px,transparent 12px 24px),radial-gradient(ellipse at 50% 40%,var(--stone-2),var(--ink-2))}
+.frame.missing img{display:none}
+.frame.missing::before{content:'INSERT IMAGE\A' attr(data-path);white-space:pre;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;line-height:2.2;color:var(--gold-dim);padding:1rem}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(34px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.12s}.rv.d2{transition-delay:.24s}.rv.d3{transition-delay:.36s}
+
+/* accordion */
+details.tech{border:1px solid var(--line-soft);background:rgba(255,255,255,.015);margin-top:1.2rem}
+details.tech summary{cursor:pointer;list-style:none;padding:.9rem 1.2rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+details.tech summary::-webkit-details-marker{display:none}
+details.tech summary::after{content:'+';font-size:1.1rem}
+details.tech[open] summary::after{content:'−'}
+details.tech summary:hover{background:rgba(201,146,42,.06)}
+details.tech .body{padding:.4rem 1.4rem 1.3rem;font-size:.9em;color:var(--muted);border-top:1px solid var(--line-soft)}
+details.tech ul{list-style:none;margin-top:.8rem}
+details.tech li{padding:.35rem 0 .35rem 1.2rem;position:relative;border-bottom:1px dashed var(--line-soft)}
+details.tech li::before{content:'◆';position:absolute;left:0;color:var(--gold-dim);font-size:.6em;top:.75em}
+details.tech b{color:var(--text);font-weight:500}
+.val{font-family:var(--mono);font-size:.78em;color:#b8d4a0}
+
+/* chips / callouts */
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+.chip{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;padding:.35rem .8rem;border:1px solid var(--line);color:var(--gold);text-transform:uppercase}
+.chip.b{color:var(--divine);border-color:rgba(126,184,212,.35)}
+.chip.e{color:#e09070;border-color:rgba(192,74,26,.4)}
+.callout{border-left:2px solid var(--gold);padding:.6rem 0 .6rem 1.4rem;margin:1.4rem 0;color:var(--muted)}
+.callout b{color:var(--text);font-weight:500}
+
+/* ==========================================================================
+   5. 01 COVER
+   ========================================================================== */
+#cover{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;border:0;padding:0}
+#cover .bg{position:absolute;inset:-6%;background:
+  radial-gradient(ellipse 70% 55% at 50% 105%,rgba(217,122,31,.28),transparent 70%),
+  radial-gradient(ellipse 45% 45% at 18% 25%,rgba(126,184,212,.12),transparent 65%),
+  radial-gradient(ellipse 45% 55% at 85% 15%,rgba(192,74,26,.14),transparent 65%),
+  linear-gradient(180deg,#0a0805,#120d08 60%,#070604);will-change:transform}
+/* [EDIT:IMAGE] assets/hero/hero_bg.jpg — your single best wide render. Used as cover backdrop */
+#cover .bg-img{position:absolute;inset:-6%;background:center/cover no-repeat;opacity:0;transition:opacity 2s;will-change:transform;filter:saturate(.9) brightness(.55)}
+#cover .bg-img.ok{opacity:1}
+#cover::before{content:'';position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at center,transparent 25%,rgba(7,6,4,.85) 100%)}
+#cover canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.mandala{position:absolute;left:50%;top:50%;width:min(95vh,900px);opacity:.09;z-index:1;transform:translate(-50%,-50%);animation:spin 200s linear infinite}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.cover-in{position:relative;z-index:3;padding:0 4vw;width:100%}
+.cover-in .eyebrow{font-family:var(--mono);font-size:clamp(.6rem,.85vw,.85rem);letter-spacing:.5em;color:var(--gold);margin-bottom:2.2rem;opacity:0;animation:fadeUp 1.6s .3s forwards}
+.cover-in h1{font-family:var(--serif);font-weight:900;line-height:.92;font-size:clamp(3.4rem,11.5vw,12rem);letter-spacing:.06em;color:#f6e7c6;
+  filter:drop-shadow(0 0 40px rgba(217,122,31,.35)) drop-shadow(0 4px 24px #000);opacity:0;animation:fadeUp 2s .6s forwards}
+.cover-in h1 span{display:block;color:transparent;background:linear-gradient(180deg,#ffd98a,#c9922a 55%,#7a4f14);-webkit-background-clip:text;background-clip:text}
+.cover-in .sub-title{font-family:var(--serif);font-size:clamp(.9rem,1.7vw,1.7rem);letter-spacing:.24em;color:var(--text);margin-top:2.2rem;opacity:0;animation:fadeUp 1.6s 1.3s forwards}
+.orn{display:flex;align-items:center;justify-content:center;gap:1rem;color:var(--gold-dim);margin:2rem auto;max-width:420px;opacity:0;animation:fadeUp 1.6s 1.5s forwards}
+.orn::before,.orn::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim))}
+.orn::after{transform:scaleX(-1)}
+.cover-in .jury{font-family:var(--mono);font-size:clamp(.6rem,.9vw,.9rem);letter-spacing:.4em;color:var(--gold-bright);opacity:0;animation:fadeUp 1.6s 1.7s forwards}
+.cover-in .team{margin-top:1.4rem;font-size:clamp(1rem,1.5vw,1.5rem);line-height:1.9;opacity:0;animation:fadeUp 1.6s 1.9s forwards}
+.cover-in .team b{font-family:var(--serif);font-weight:500;letter-spacing:.1em}
+.cover-in .team span{font-family:var(--mono);font-size:.7em;color:var(--muted);letter-spacing:.14em;margin-left:.6rem}
+.cover-in .stmt{max-width:62ch;margin:2rem auto 0;font-style:italic;color:var(--muted);font-size:clamp(1rem,1.3vw,1.3rem);opacity:0;animation:fadeUp 1.6s 2.1s forwards}
+.enter{display:inline-block;margin-top:2.6rem;font-family:var(--serif);letter-spacing:.34em;font-size:clamp(.7rem,1vw,1rem);color:var(--gold-bright);text-decoration:none;padding:1.1rem 2.8rem;border:1px solid var(--gold);position:relative;overflow:hidden;opacity:0;animation:fadeUp 1.6s 2.4s forwards;transition:color .4s}
+.enter::before{content:'';position:absolute;inset:0;background:var(--gold);transform:translateY(101%);transition:transform .5s;z-index:-1}
+.enter:hover{color:var(--ink)}.enter:hover::before{transform:none}
+.enter{z-index:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;z-index:3;width:1px;height:60px;background:linear-gradient(var(--gold),transparent);animation:hint 2.4s infinite}
+@keyframes hint{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ==========================================================================
+   6. 02 OVERVIEW
+   ========================================================================== */
+.ov-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(2rem,5vw,6rem);align-items:start;margin-top:3rem}
+.ov-quote{font-family:var(--serif);font-size:clamp(1.2rem,2.1vw,2.1rem);line-height:1.5;color:var(--text);border-left:2px solid var(--gold);padding-left:1.8rem;margin-bottom:2rem}
+.goals{list-style:none;counter-reset:g;display:grid;gap:0}
+.goals li{counter-increment:g;display:grid;grid-template-columns:3.2rem 1fr;gap:1rem;padding:1.05rem 0;border-bottom:1px solid var(--line-soft);align-items:baseline}
+.goals li::before{content:counter(g,decimal-leading-zero);font-family:var(--mono);color:var(--gold);font-size:.72em;letter-spacing:.1em}
+.goals li b{font-family:var(--serif);font-weight:500;letter-spacing:.05em;color:var(--text);display:block}
+.goals li span{color:var(--muted);font-size:.9em}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);margin-top:3.5rem}
+.three>div{background:var(--ink);padding:2rem 1.8rem}
+.three h4{font-family:var(--serif);font-weight:500;letter-spacing:.14em;color:var(--gold);font-size:.85rem;margin-bottom:.8rem}
+.three p{color:var(--muted);font-size:.92em;margin:0}
+
+/* ==========================================================================
+   7. 03 CONCEPT  – interactive stage timeline
+   ========================================================================== */
+.tl{margin-top:3.5rem}
+.tl-rail{display:grid;grid-template-columns:repeat(10,1fr);position:relative;margin-bottom:2rem}
+.tl-rail::before{content:'';position:absolute;left:5%;right:5%;top:11px;height:1px;background:var(--line)}
+.tl-rail button{background:none;border:0;cursor:pointer;color:var(--faint);font-family:var(--mono);font-size:clamp(.5rem,.7vw,.7rem);letter-spacing:.12em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:.8rem;position:relative;transition:color .3s;padding:0 .2rem}
+.tl-rail button i{width:23px;height:23px;border-radius:50%;background:var(--ink);border:1px solid var(--gold-dim);display:block;position:relative;transition:.35s}
+.tl-rail button i::after{content:'';position:absolute;inset:6px;border-radius:50%;background:var(--gold);opacity:0;transition:.3s}
+.tl-rail button:hover{color:var(--gold)}
+.tl-rail button.on{color:var(--gold-bright)}
+.tl-rail button.on i{border-color:var(--gold-bright);box-shadow:0 0 18px rgba(240,184,74,.55);transform:scale(1.2)}
+.tl-rail button.on i::after{opacity:1}
+.tl-stage{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(1.5rem,4vw,4rem);align-items:center;min-height:420px}
+.tl-stage .txt .n{font-family:var(--mono);font-size:.68rem;letter-spacing:.3em;color:var(--gold-dim)}
+.tl-stage .txt h3{font-family:var(--serif);font-size:clamp(1.6rem,3vw,3rem);color:var(--gold-bright);margin:.4rem 0 1rem;letter-spacing:.06em}
+.tl-stage .txt .ach{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--line-soft);color:var(--muted);font-size:.92em}
+.tl-stage .txt .ach b{font-family:var(--mono);font-size:.6rem;letter-spacing:.24em;color:var(--gold);display:block;margin-bottom:.3rem;font-weight:400}
+.tl-imgs .frame{display:none}.tl-imgs .frame.on{display:block;animation:fadeIn .7s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.tl-ctrl{display:flex;gap:.6rem;margin-top:1.4rem}
+.tl-ctrl button{background:none;border:1px solid var(--line);color:var(--gold);padding:.55rem 1.2rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;cursor:pointer}
+.tl-ctrl button:hover{background:var(--gold);color:var(--ink)}
+
+/* ==========================================================================
+   8. 04 WORKFLOW – 14 stages
+   ========================================================================== */
+#workflow{background:linear-gradient(180deg,var(--ink),var(--ink-2))}
+.wf{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(1.2rem,2.4vw,2.4rem) clamp(2rem,4vw,5rem);margin-top:4rem}
+.wf-item{display:grid;grid-template-columns:clamp(120px,14vw,240px) 1fr;gap:1.4rem;align-items:start;padding-bottom:1.6rem;border-bottom:1px solid var(--line-soft)}
+.wf-item .frame{aspect-ratio:4/3}
+.wf-item .no{font-family:var(--serif);font-weight:900;font-size:clamp(1.8rem,3vw,3rem);color:transparent;-webkit-text-stroke:1px var(--gold-dim);line-height:1}
+.wf-item h4{font-family:var(--serif);font-weight:500;letter-spacing:.09em;color:var(--text);font-size:clamp(.95rem,1.3vw,1.3rem);margin:.2rem 0 .4rem}
+.wf-item p{color:var(--muted);font-size:.9em;margin:0;line-height:1.55}
+.wf-item.wide{grid-column:1/-1}
+
+/* ==========================================================================
+   14. 10 PROCESS / JOURNEY + PIPELINE
+   ========================================================================== */
+.journey{margin-top:4rem;position:relative}
+.journey::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(var(--line),var(--line-soft))}
+.jr{display:grid;grid-template-columns:1fr 1fr;gap:clamp(3rem,6vw,8rem);align-items:center;margin-bottom:clamp(3rem,6vw,6rem);position:relative}
+.jr::after{content:'';position:absolute;left:50%;top:50%;width:13px;height:13px;background:var(--ink);border:1px solid var(--gold);transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 16px rgba(240,184,74,.4)}
+.jr:nth-child(even) .jr-media{order:2}
+.jr .st{font-family:var(--mono);font-size:.62rem;letter-spacing:.32em;color:var(--gold-dim)}
+.jr h4{font-family:var(--serif);font-weight:500;font-size:clamp(1.3rem,2.4vw,2.4rem);letter-spacing:.06em;color:var(--gold-bright);margin:.3rem 0 .8rem}
+.jr .chg{margin-top:1rem;padding-top:.8rem;border-top:1px solid var(--line-soft);font-size:.88em;color:var(--muted)}
+.jr .chg b{font-family:var(--mono);font-weight:400;font-size:.56rem;letter-spacing:.24em;color:var(--gold);display:block}
+.pipe{display:flex;flex-direction:column;align-items:center;margin-top:2rem;gap:0}
+.pipe .node{width:min(560px,100%);text-align:center;padding:1rem 1.4rem;border:1px solid var(--line);background:rgba(255,255,255,.015);position:relative}
+.pipe .node b{font-family:var(--serif);font-weight:500;letter-spacing:.14em;font-size:.9rem;color:var(--text)}
+.pipe .node span{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.16em;color:var(--muted);margin-top:.3rem;text-transform:uppercase}
+.pipe .node.hi{border-color:var(--gold-bright);box-shadow:0 0 30px rgba(201,146,42,.18) inset}
+.pipe .arr{width:1px;height:26px;background:var(--gold-dim);position:relative}
+.pipe .arr::after{content:'';position:absolute;bottom:-1px;left:-4px;border:4.5px solid transparent;border-top:7px solid var(--gold-dim);border-bottom:0}
+.pipe-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,6rem);align-items:start;margin-top:3rem}
+
+/* ==========================================================================
+   15. 11 FINAL GALLERY
+   ========================================================================== */
+#final{background:radial-gradient(ellipse at 50% 0%,rgba(217,122,31,.1),transparent 60%),var(--ink)}
+.gal{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(.7rem,1.2vw,1.2rem);margin-top:4rem}
+.gal .frame{grid-column:span 6}
+.gal .frame.full{grid-column:1/-1;aspect-ratio:21/9}
+.gal .frame.w8{grid-column:span 8}.gal .frame.w4{grid-column:span 4;aspect-ratio:auto}
+.gal .frame:hover{border-color:var(--gold)}
+.gal .frame figcaption{font-size:.72rem;padding-bottom:1.2rem}
+
+/* ==========================================================================
+   17. 13 REFLECTION / OUTCOME
+   ========================================================================== */
+.ch-table{margin-top:3rem;border:1px solid var(--line-soft)}
+.ch-row{display:grid;grid-template-columns:.8fr 1.2fr 1.2fr 1.2fr;border-bottom:1px solid var(--line-soft)}
+.ch-row:last-child{border-bottom:0}
+.ch-row.h>div{font-family:var(--mono);font-size:.56rem;letter-spacing:.24em;color:var(--gold-dim);text-transform:uppercase;background:rgba(201,146,42,.05)}
+.ch-row>div{padding:1.1rem 1.3rem;font-size:.86em;color:var(--muted);border-right:1px solid var(--line-soft)}
+.ch-row>div:last-child{border-right:0}
+.ch-row>div:first-child{font-family:var(--serif);letter-spacing:.08em;color:var(--gold-bright);font-size:.85rem}
+.outcome{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);margin-top:4rem}
+.outcome div{background:var(--ink);padding:1.6rem 1.2rem;text-align:center}
+.outcome b{display:block;font-family:var(--serif);font-weight:500;letter-spacing:.1em;color:var(--gold);font-size:.85rem;margin-bottom:.5rem}
+.outcome span{font-size:.8em;color:var(--muted);line-height:1.45;display:block}
+.conclusion{max-width:70ch;margin:3rem auto 0;text-align:center;font-family:var(--serif);font-size:clamp(1.1rem,1.8vw,1.8rem);line-height:1.6;color:var(--text)}
+
+/* ==========================================================================
+   18. 14 TEAM / CREDITS
+   ========================================================================== */
+#team{min-height:100vh;display:flex;align-items:center;text-align:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 100%,rgba(217,122,31,.2),transparent 65%),var(--ink)}
+#team .mandala{opacity:.06}
+#team h2{font-family:var(--serif);font-weight:900;font-size:clamp(2.6rem,8vw,8rem);letter-spacing:.1em;color:transparent;background:linear-gradient(180deg,#ffd98a,#c9922a 60%,#7a4f14);-webkit-background-clip:text;background-clip:text}
+#team .by{font-family:var(--mono);letter-spacing:.5em;font-size:.72rem;color:var(--gold-dim);margin:2.4rem 0 1.6rem}
+.people{display:flex;justify-content:center;gap:clamp(2rem,8vw,9rem);flex-wrap:wrap}
+.people div b{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(1.4rem,2.6vw,2.6rem);letter-spacing:.12em}
+.people div span{font-family:var(--mono);letter-spacing:.24em;font-size:.72rem;color:var(--gold)}
+#team .meta{margin-top:3rem;font-family:var(--serif);letter-spacing:.24em;color:var(--muted);font-size:clamp(.8rem,1.1vw,1.1rem);line-height:2.2}
+
+/* ==========================================================================
+   19. LIGHTBOX
+   ========================================================================== */
+#lb{position:fixed;inset:0;background:rgba(4,3,2,.97);z-index:2000;display:none;align-items:center;justify-content:center;flex-direction:column;padding:4vh 4vw}
+#lb.open{display:flex;animation:fadeIn .3s}
+#lb img{max-width:100%;max-height:82vh;object-fit:contain;box-shadow:0 0 80px rgba(0,0,0,.8);border:1px solid var(--line)}
+#lb .cap{margin-top:1.2rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.3em;color:var(--gold-bright);text-transform:uppercase;text-align:center}
+#lb button{position:absolute;background:none;border:1px solid var(--line);color:var(--gold);cursor:pointer;width:52px;height:52px;font-size:1.3rem}
+#lb button:hover{background:var(--gold);color:var(--ink)}
+#lb .x{top:2vh;right:2vw}#lb .p{left:2vw;top:50%}#lb .n{right:2vw;top:50%}
+
+/* ==========================================================================
+   20. RESPONSIVE
+   ========================================================================== */
+@media(max-width:1200px){
+  .mat-grid,.vfx-grid{grid-template-columns:repeat(2,1fr)}
+  .zones{grid-template-columns:repeat(3,1fr)}
+  .outcome{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+  nav.top .brand{display:none}
+  .ov-grid,.env-body,.env.flip .env-body,.tl-stage,.shot,.demo,.pipe-wrap,.lang,.light-cols,.three,.wf{grid-template-columns:1fr}
+  .env.flip .env-media{order:0}
+  .tl-rail{grid-template-columns:repeat(5,1fr);row-gap:1.2rem}.tl-rail::before{display:none}
+  .wf-item{grid-template-columns:110px 1fr}
+  .journey::before,.jr::after{display:none}
+  .jr{grid-template-columns:1fr;gap:1.2rem}.jr:nth-child(even) .jr-media{order:0}
+  .gal .frame,.gal .frame.w8,.gal .frame.w4{grid-column:1/-1;aspect-ratio:16/9}
+  .seq{flex-wrap:wrap}.seq button{flex:1 1 33%;border-bottom:1px solid var(--line-soft)}
+  .ch-row{grid-template-columns:1fr}.ch-row.h{display:none}
+  .ch-row>div{border-right:0}
+  .bignum{display:none}
+  #fsBtn{display:none}
+}
+@media(max-width:560px){
+  .mat-grid,.vfx-grid,.zones,.outcome{grid-template-columns:1fr}
+  .env-media .duo{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+}
+@media print{nav.top,#toTop,#progress{display:none}}
+
+
+/* ==========================================================================
+   NEW · REAL-IMAGE COMPONENTS
+   ========================================================================== */
+.frame.ui{background:#0d0d0d}
+.frame.ui img{object-fit:contain}
+.frame.orn{cursor:default;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 45%,#231a10,#0a0806);text-align:center}
+.frame.orn::after{box-shadow:inset 0 0 90px rgba(0,0,0,.6)}
+.frame.orn svg{position:absolute;width:75%;max-height:120%;opacity:.13;animation:spinC 160s linear infinite}
+@keyframes spinC{to{transform:rotate(360deg)}}
+.frame.orn .o{position:relative;z-index:2;font-family:var(--serif);font-weight:600;letter-spacing:.24em;font-size:clamp(.9rem,1.6vw,1.6rem);color:var(--gold-bright);line-height:1.6;padding:0 1rem}
+.frame.orn .o small{display:block;font-family:var(--mono);font-size:.5em;letter-spacing:.3em;color:var(--gold-dim);font-weight:400}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:.6rem;margin-top:.6rem}
+.thumbs .frame figcaption{font-size:.5rem;padding:1.4rem .7rem .5rem;letter-spacing:.16em}
+.tl-set{display:none}.tl-set.on{display:block;animation:fadeIn .7s}
+.tl-imgs .tl-set .frame{display:block}
+.jr-media .thumbs{margin-top:.6rem}
+.gal.ov .frame{grid-column:span 4;aspect-ratio:16/10}
+.gal.ov .frame.full{grid-column:1/-1;aspect-ratio:21/9}
+.gal.ov .frame.s6{grid-column:span 6;aspect-ratio:16/9}
+.exp{margin-top:clamp(4rem,7vw,7rem);padding:clamp(1.5rem,3vw,3rem);border:1px dashed rgba(217,154,224,.35);background:rgba(217,154,224,.025)}
+.exp-in{display:grid;grid-template-columns:1fr 1.6fr;gap:clamp(1.5rem,3vw,3rem);align-items:center}
+.exp .thumbs{grid-template-columns:repeat(3,1fr);margin:0}
+.facts3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);margin-top:3rem}
+.facts3>div{background:var(--ink);padding:1.5rem 1.6rem}
+.facts3 i{font-style:normal;font-family:var(--mono);font-size:.56rem;letter-spacing:.26em;color:var(--gold-dim);text-transform:uppercase}
+.facts3 b{display:block;font-family:var(--serif);font-weight:500;letter-spacing:.08em;color:var(--text);margin-top:.35rem;font-size:1rem}
+.facts3 span.badge{display:inline-flex;margin-top:.6rem}
+.facts3 span{display:block;font-size:.82em;color:var(--muted);margin-top:.3rem;line-height:1.5}
+.evid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,2vw,2rem);margin-top:3rem}
+.evid figure.card p{margin:.9rem 0 0;font-size:.86em;color:var(--muted)}
+.evid figure.card b{font-family:var(--serif);font-weight:500;letter-spacing:.08em;color:var(--gold-bright);display:block;font-size:.9rem;margin-top:.9rem}
+.pipe.h{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:.6rem;align-items:stretch}
+.pipe.h .node{width:auto;flex:1 1 160px;max-width:230px}
+.pipe.h .arr{display:none}
+.fn{font-size:.8em;color:var(--faint);margin-top:1rem;font-style:italic}
+@media(max-width:900px){.gal.ov .frame,.gal.ov .frame.s6{grid-column:1/-1;aspect-ratio:16/9}.exp-in,.facts3,.evid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- NAVIGATION -->
+<nav class="top" id="nav" aria-label="Presentation sections">
+  <a class="brand" href="#cover">DIVINE RECKONING</a>
+  <div class="links">
+    <a class="l" href="#overview">OVERVIEW</a>
+    <a class="l" href="#concept">CONCEPT</a>
+    <a class="l" href="#workflow">WORKFLOW</a>
+    <a class="l" href="#reflection">REFLECTION</a>
+    <a class="l" href="#team">TEAM</a>
+  </div>
+  <button id="fsBtn" type="button" title="Toggle fullscreen (F)">FULLSCREEN</button>
+</nav>
+<button id="toTop" type="button" aria-label="Back to top">↑</button>
+
+<main>
+
+<!-- =====================================================================
+     COVER   [EDIT:TEXT] [EDIT:TEAM] [EDIT:IMAGE] assets/hero/hero_bg.jpg
+     ===================================================================== -->
+<section id="cover" class="chapter" data-nav="cover">
+  <div class="bg" data-parallax="0.15"></div>
+  <div class="bg-img" id="heroImg" data-parallax="0.25"></div>
+  <svg class="mandala" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+    <g stroke="#c9922a" stroke-width=".5">
+      <circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="110"/><circle cx="200" cy="200" r="70"/><circle cx="200" cy="200" r="9"/>
+      <polygon points="200,15 380,315 20,315"/><polygon points="200,385 380,85 20,85"/>
+      <line x1="200" y1="10" x2="200" y2="390" stroke-width=".3"/><line x1="10" y1="200" x2="390" y2="200" stroke-width=".3"/>
+      <line x1="66" y1="66" x2="334" y2="334" stroke-width=".3"/><line x1="334" y1="66" x2="66" y2="334" stroke-width=".3"/>
+    </g>
+  </svg>
+  <canvas id="dust" aria-hidden="true"></canvas>
+
+  <div class="cover-in">
+    <div class="eyebrow">UNREAL ENGINE 5 &nbsp;·&nbsp; CINEMATIC GAME ENVIRONMENT</div>
+    <h1>DIVINE<span>RECKONING</span></h1>
+    <div class="sub-title">An Unreal Engine 5 Environment &amp; Cinematic Game Experience</div>
+    <div class="orn">⬡</div>
+    <div class="jury">6TH SEMESTER JURY PRESENTATION</div>
+    <div class="team"><!-- [EDIT:TEAM] -->
+      <b>Varun Vavilala</b><span>23011BC041</span> &nbsp;&nbsp;◆&nbsp;&nbsp; <b>Vajra</b><span>23011BC029</span>
+    </div>
+    <p class="stmt">A cinematic environment experience combining Indian mythology, ancient ruins, natural landscapes and real-time Unreal Engine production techniques.</p>
+    <a class="enter" href="#overview">ENTER EXPERIENCE</a>
+  </div>
+  <div class="scroll-hint"></div>
+</section>
+
+<!-- =====================================================================
+     OVERVIEW   [EDIT:TEXT]  [EDIT:IMAGE] assets/final/*.jpg
+     ===================================================================== -->
+<section id="overview" class="chapter" data-nav="overview">
+  <div class="bignum">01</div>
+  <div class="wrap">
+    <div class="kicker rv">01 — Project Overview</div>
+    <h2 class="title rv">A world older than <em>memory</em></h2>
+
+    <div class="ov-grid">
+      <div class="rv">
+        <h3 class="sub">Project Concept</h3>
+        <p class="ov-quote">An archaeologist vanishes into an ancient Indian ruin. His friend follows — through a primeval forest, behind a waterfall, into a cave, toward a temple older than history.</p>
+        <p style="color:var(--muted)">There, a god reveals that the seals holding back a world-ending force are breaking. The protagonist must master divine arts, gather allies, and stop what is coming. <em>Divine Reckoning</em> is the environment and cinematic world built to tell that journey.</p>
+
+        <h3 class="sub" style="margin-top:2.2rem">Core Idea</h3>
+        <p style="color:var(--muted)">The world is a descent: from <b style="color:var(--text);font-weight:500">living jungle</b> to <b style="color:var(--text);font-weight:500">dark cave</b> to <b style="color:var(--text);font-weight:500">sacred stone</b>. Each space changes light, colour and mood so the viewer feels the story before any dialogue — golden and humid outside, cold and oppressive inside, sacred and charged at the heart.</p>
+      </div>
+
+      <div class="rv d1">
+        <h3 class="sub">Project Goals</h3>
+        <ol class="goals">
+          <li><div><b>Immersive Indian-inspired world</b><span>A dense forest, a cave and an ancient temple.</span></div></li>
+          <li><div><b>Environmental storytelling</b><span>Light, decay and detail communicate the story.</span></div></li>
+          <li><div><b>Unreal Engine 5 workflows</b><span>Landscape, materials, foliage, lighting and fog.</span></div></li>
+          <li><div><b>VFX &amp; atmosphere</b><span>Volumetric fog, god rays, drifting particles, fire.</span></div></li>
+          <li><div><b>A playable, demo-ready experience</b><span>Explorable in VR through a standalone Android build.</span></div></li>
+          <li><div><b>A visually convincing final scene</b><span>Distinct mood and colour in every zone.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="facts3 rv">
+      <div><i>Engine</i><b>Unreal Engine 5</b><span>Real-time rendering, dynamic lighting and fog.</span></div>
+      <div><i>Worlds</i><b>Forest · Cave · Temple</b><span>Built as separate levels, each with its own light and mood.</span></div>
+      <div><i>Experience</i><b>VR · Android build</b><span>Teleport locomotion, packaged as a standalone APK. <span class="badge" data-status="implemented" style="margin-top:.5rem"></span></span></div>
+    </div>
+
+    <h3 class="sub rv" style="margin-top:5rem">THE WORLD AT A GLANCE</h3>
+    <!-- [EDIT:IMAGE] swap files in assets/final/ to change the gallery -->
+    <div class="gal ov">
+      <figure class="frame full rv" data-path="assets/final/canopy_aerial.jpg"><i class="corner tl"></i><i class="corner br"></i><img src="assets/final/canopy_aerial.jpg" alt="Forest canopy from above" loading="lazy"><figcaption>Forest canopy — aerial view</figcaption></figure>
+      <figure class="frame rv" data-path="assets/final/forest_path.jpg"><img src="assets/final/forest_path.jpg" alt="Forest trail" loading="lazy"><figcaption>Forest trail</figcaption></figure>
+      <figure class="frame rv d1" data-path="assets/final/river.jpg"><img src="assets/final/river.jpg" alt="River through the forest" loading="lazy"><figcaption>River through the forest</figcaption></figure>
+      <figure class="frame rv d2" data-path="assets/final/forest_vr_view.jpg"><img src="assets/final/forest_vr_view.jpg" alt="Forest in VR" loading="lazy"><figcaption>Forest — VR player view</figcaption></figure>
+      <figure class="frame s6 rv" data-path="assets/final/cave_temple.jpg"><img src="assets/final/cave_temple.jpg" alt="Cave temple in blue light" loading="lazy"><figcaption>Cave temple — cold light</figcaption></figure>
+      <figure class="frame s6 rv d1" data-path="assets/final/sanctum.jpg"><i class="corner tl"></i><i class="corner br"></i><img src="assets/final/sanctum.jpg" alt="Temple sanctum with god rays" loading="lazy"><figcaption>Temple sanctum — braziers &amp; god rays</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     CONCEPT — interactive stage timeline  [EDIT:DATA] STAGES array below
+     ===================================================================== -->
+<section id="concept" class="chapter" data-nav="concept">
+  <div class="bignum">02</div>
+  <div class="wrap">
+    <div class="kicker rv">02 — Design &amp; Concept Development</div>
+    <h2 class="title rv">Built in <em>stages</em>, not assembled at once</h2>
+    <p class="lede rv">Select a stage to see what it was for and what it produced.</p>
+
+    <div class="tl rv" id="tl">
+      <div class="tl-rail" id="tlRail"></div>
+      <div class="tl-stage">
+        <div class="txt" id="tlTxt"></div>
+        <div class="tl-imgs" id="tlImgs"></div>
+      </div>
+      <div class="tl-ctrl"><button type="button" id="tlPrev">◂ PREV</button><button type="button" id="tlNext">NEXT ▸</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     WORKFLOW   [EDIT:DATA] WF and JOURNEY arrays below
+     ===================================================================== -->
+<section id="workflow" class="chapter" data-nav="workflow">
+  <div class="bignum">03</div>
+  <div class="wrap">
+    <div class="kicker rv">03 — Development Workflow</div>
+    <h2 class="title rv">From concept to <em>real-time world</em></h2>
+    <p class="lede rv">Fourteen stages, from story to a running build. Stages without a screenshot are shown with an ornament instead of an image.</p>
+    <div class="wf" id="wf"></div>
+
+    <!-- The Development Journey -->
+    <div style="margin-top:clamp(5rem,9vw,9rem)">
+      <div class="kicker rv">The Development Journey</div>
+      <h2 class="title rv">How the world <em>came together</em></h2>
+      <p class="lede rv">Real work-in-progress screenshots from the Unreal Engine editor, in the order the world took shape. Click any image to enlarge.</p>
+      <div class="journey" id="journey"></div>
+    </div>
+
+    <!-- City experiment -->
+    <div class="exp rv" id="cityExp"></div>
+
+    <!-- Pipeline -->
+    <h3 class="sub rv" style="margin-top:6rem">TECHNICAL PIPELINE</h3>
+    <div class="pipe h rv" style="margin-top:1.6rem">
+      <div class="node"><b>CONCEPT</b><span>Story · references</span></div>
+      <div class="node"><b>ASSETS</b><span>Fab · Megascans · Blender*</span></div>
+      <div class="node hi"><b>UNREAL ENGINE 5</b><span>Landscape · levels</span></div>
+      <div class="node"><b>MATERIALS</b><span>Rock · water · stone</span></div>
+      <div class="node"><b>FOLIAGE</b><span>Forest map</span></div>
+      <div class="node"><b>LIGHT &amp; FOG</b><span>Sun · sky · height fog</span></div>
+      <div class="node"><b>VR BLUEPRINTS</b><span>Teleport locomotion</span></div>
+      <div class="node hi"><b>ANDROID BUILD</b><span>Standalone APK</span></div>
+    </div>
+    <p class="fn rv">* Blender is part of the documented workflow for custom pieces (cave, waterfall sheet, ruin modules); confirm before presenting it as used.</p>
+  </div>
+</section>
+
+<!-- =====================================================================
+     REFLECTION — challenges, evidence, outcome   [EDIT:TEXT]
+     ===================================================================== -->
+<section id="reflection" class="chapter" data-nav="reflection">
+  <div class="bignum">04</div>
+  <div class="wrap">
+    <div class="kicker rv">04 — Challenges &amp; Learning</div>
+    <h2 class="title rv">Problems met, <em>lessons kept</em></h2>
+    <p class="lede rv">Challenge → approach → learning, drawn from what the screenshots show.</p>
+
+    <div class="ch-table rv">
+      <div class="ch-row h"><div>Area</div><div>Challenge</div><div>Approach</div><div>Learning</div></div>
+      <div class="ch-row"><div>Lighting</div><div>Early placeholder light washed the cave out to flat blue-white.</div><div>Directional light, height fog, sky atmosphere, sky light and volumetric cloud tuned per level.</div><div>Lighting is a storytelling tool, not only realism.</div></div>
+      <div class="ch-row"><div>Materials</div><div>Rock textures showed an obvious repeating tile pattern on the landscape.</div><div>Material functions with tiling and offset inputs to vary the texture.</div><div>Visible repetition breaks realism fast.</div></div>
+      <div class="ch-row"><div>Foliage</div><div>A forest that feels dense yet still reads clearly from the camera.</div><div>A dedicated forest map with layered trees, backdrop forest walls and drifting light.</div><div>Density needs control, not just quantity.</div></div>
+      <div class="ch-row"><div>Cave</div><div>Landscape cannot form overhangs, so a cave cannot be sculpted in it. <span class="badge" data-status="workflow" style="margin-top:.4rem"></span></div><div>Model the cave as a separate mesh and place it over the terrain.</div><div>Choose the right tool for each form.</div></div>
+      <div class="ch-row"><div>VR movement</div><div>Moving comfortably through a large space in VR.</div><div>A teleport trace set up in Blueprints with a visualizer, driven by an input action.</div><div>VR needs its own interaction design.</div></div>
+      <div class="ch-row"><div>Delivery</div><div>Turning the scene into something the jury can run.</div><div>Android packaging configured (APK, minimum SDK 29, target 34) with game data packed inside.</div><div>A running build is a different discipline from a good screenshot.</div></div>
+    </div>
+
+    <div class="evid" id="evid"></div>
+
+    <div style="margin-top:7rem">
+      <div class="kicker rv">Final Outcome</div>
+      <h2 class="title rv">What this project <em>demonstrates</em></h2>
+      <div class="outcome rv">
+        <div><b>ENVIRONMENT</b><span>End-to-end Unreal Engine 5 world building</span></div>
+        <div><b>REAL-TIME</b><span>Dynamic lighting, fog and live iteration</span></div>
+        <div><b>STORY</b><span>Environmental storytelling across zones</span></div>
+        <div><b>ATMOSPHERE</b><span>God rays, fog, particles and fire</span></div>
+        <div><b>INTERACTION</b><span>An explorable VR build with teleport movement</span></div>
+        <div><b>TEAMWORK</b><span>Two designers, one shared world</span></div>
+      </div>
+      <p class="conclusion rv">Divine Reckoning turns an ancient myth into a place you can walk through — built by two people, in real time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     TEAM   [EDIT:TEAM]
+     ===================================================================== -->
+<section id="team" class="chapter" data-nav="team">
+  <svg class="mandala" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+    <g stroke="#c9922a" stroke-width=".5"><circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="150"/><circle cx="200" cy="200" r="110"/><circle cx="200" cy="200" r="70"/><polygon points="200,15 380,315 20,315"/><polygon points="200,385 380,85 20,85"/></g>
+  </svg>
+  <div class="wrap" style="position:relative;z-index:2">
+    <h2 class="rv">DIVINE<br>RECKONING</h2>
+    <div class="by rv">DESIGNED &amp; DEVELOPED BY</div>
+    <div class="people rv">
+      <div><b>Varun Vavilala</b><span>ROLL NO. 23011BC041</span></div>
+      <div><b>Vajra</b><span>ROLL NO. 23011BC029</span></div>
+    </div>
+    <div class="meta rv">6TH SEMESTER<br>UNREAL ENGINE 5 ENVIRONMENT &amp; INTERACTIVE EXPERIENCE</div>
+  </div>
+</section>
+
+</main>
+
+<!-- LIGHTBOX -->
+<div id="lb" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button class="x" type="button" aria-label="Close">✕</button>
+  <button class="p" type="button" aria-label="Previous">◂</button>
+  <img id="lbImg" alt="">
+  <div class="cap" id="lbCap"></div>
+  <button class="n" type="button" aria-label="Next">▸</button>
+</div>
+
+<script>
+/* ==========================================================================
+   A. CONFIG
+   ========================================================================== */
+const CONFIG = {
+  statusLabels: {
+    implemented: "IMPLEMENTED",
+    workflow: "DEVELOPMENT WORKFLOW",
+    concept: "CONCEPT",
+    experiment: "EXPERIMENT",
+    planned: "PLANNED / OPTIONAL"
+  }
+};
+const P = 'assets/process/', F = 'assets/final/';   // image folders
+
+/* ==========================================================================
+   B. DATA  [EDIT:DATA]
+   Each image: [path, caption, "ui"?]   ("ui" = full editor screenshot, shown uncropped)
+   An empty imgs list shows a decorative ornament instead of a picture.
+   ========================================================================== */
+const STAGES = [
+  {k:"CONCEPT", t:"Concept", s:"concept", imgs:[],
+   d:"The story, tone and mythological setting are defined: an archaeologist’s disappearance, a hidden temple, a breaking seal.",
+   a:"A clear narrative spine and a five-space journey: forest, waterfall, cave, ruins, temple."},
+  {k:"REFERENCE", t:"Reference", s:"concept", imgs:[],
+   d:"Real places guide the look: Western Ghats forest, Hampi and Vijayanagara ruins, Dravidian temple forms.",
+   a:"A reference set that keeps the world authentically Indian."},
+  {k:"BLOCKOUT", t:"Blockout", s:"implemented",
+   imgs:[[P+"blockout_landscape.jpg","Landscape with rock material"],[P+"blockout_water.jpg","Water plane test"]],
+   d:"A landscape and simple shapes establish scale and where each space sits. A water plane and a tiled rock material are tested on the terrain.",
+   a:"A working test bed for terrain, material and water."},
+  {k:"MODELING", t:"Modeling & Assets", s:"workflow",
+   imgs:[[P+"statue_asset.jpg","Seated statue as altar focal point"],[F+"brazier.jpg","Brazier detail"]],
+   d:"Structures, columns, the altar statue and braziers are assembled into the cave temple. Custom pieces are modelled in Blender in the documented workflow.",
+   a:"Hero geometry and props for the sacred space."},
+  {k:"ENVIRONMENT", t:"Environment", s:"implemented",
+   imgs:[[P+"forest_map_aerial.jpg","Forest map — from above"],[P+"cave_foliage.jpg","Cave with foliage assets"],[P+"forest_map_rays.jpg","Forest — light shafts"]],
+   d:"Terrain, trees and foliage build the forest, while the cave chamber gains columns, steps and vegetation.",
+   a:"A populated, composed world across separate levels."},
+  {k:"MATERIALS", t:"Materials", s:"implemented",
+   imgs:[[P+"materials_function.jpg","Tiling material function","ui"],[P+"cave_materials_list.jpg","Cave material set","ui"]],
+   d:"A set of cave rock materials and reusable material functions for tiling and offset give surfaces variation and age.",
+   a:"Surfaces that read as weathered stone rather than flat texture."},
+  {k:"LIGHTING", t:"Lighting", s:"implemented",
+   imgs:[[P+"lighting_dark.jpg","Cold shafts of light in the cave"],[P+"lighting_fog_river.jpg","Fog over the river"],[F+"sanctum.jpg","Sanctum — braziers & god rays"]],
+   d:"Directional light, exponential height fog, sky atmosphere, sky light and volumetric cloud set the mood of each zone.",
+   a:"Depth, god rays and a distinct tone per space."},
+  {k:"VFX", t:"VFX & Atmosphere", s:"workflow",
+   imgs:[[P+"forest_particles.jpg","Drifting particles in the forest"],[F+"brazier.jpg","Fire and smoke"]],
+   d:"Drifting particles, fog and fire add life. Niagara systems for splash, mist and divine energy are described in the workflow.",
+   a:"A living, atmospheric world."},
+  {k:"CINEMATIC", t:"Cinematic Views", s:"workflow",
+   imgs:[[F+"canopy_aerial.jpg","Establishing view"],[F+"river.jpg","River view"],[F+"forest_vr_view.jpg","Player view"]],
+   d:"Views are composed from wide establishing angles down to the player’s own eye level. Sequencer shots are part of the documented workflow.",
+   a:"Deliberate framing that reveals the world."},
+  {k:"FINAL DEMO", t:"Final Demo", s:"implemented",
+   imgs:[[P+"android_packaging.jpg","Android packaging settings","ui"],[P+"vr_teleport_bp.jpg","VR teleport Blueprint","ui"],[F+"sanctum.jpg","The finished sanctum"]],
+   d:"The scene gains VR teleport locomotion and is configured for a standalone Android (APK) build.",
+   a:"A build the jury can run."}
+];
+
+const WF = [
+  ["Concept & Story","The narrative, tone and five-space journey are defined before any asset is made.",null],
+  ["Environment Planning","Layout, scale, camera path and references for each zone are planned.",null],
+  ["Terrain / Landscape","A landscape with rock material forms the base of the world.",[P+"blockout_landscape.jpg","Landscape"]],
+  ["Asset Creation & Import","Statues, columns and props are imported and placed; custom pieces come from Blender.",[P+"statue_asset.jpg","Altar statue"]],
+  ["Foliage & Vegetation","Layered trees and undergrowth fill the forest map.",[P+"forest_map_rays.jpg","Forest"]],
+  ["Waterfall & Water","Water planes and rivers bring flowing water into the scene.",[P+"blockout_water.jpg","Water"]],
+  ["Cave & Ruins","A cave chamber with columns, steps and a water pool.",[P+"cave_water_dark.jpg","Cave"]],
+  ["Materials","Rock materials and tiling functions give surfaces variation.",[P+"materials_function.jpg","Materials","ui"]],
+  ["Lighting","Sun, sky and interior light set the mood of each zone.",[P+"lighting_dark.jpg","Lighting"]],
+  ["Atmosphere","Exponential height fog and volumetric light add depth.",[P+"lighting_fog_river.jpg","Fog"]],
+  ["Niagara VFX","Fire, smoke and drifting particles; splash and mist per the workflow.",[F+"brazier.jpg","Fire"]],
+  ["Camera / Sequencer","Wide and eye-level views frame the world as a journey.",[F+"canopy_aerial.jpg","Camera view"]],
+  ["Optimization","Lighting, foliage and settings are tuned so the scene runs in real time.",null],
+  ["Final Build / Demo","VR teleport locomotion and a packaged Android build.",[P+"android_packaging.jpg","Android build","ui"]]
+];
+
+const JOURNEY = [
+  {n:"01", t:"Initial Blockout", s:"implemented",
+   d:"The project starts from the default third-person starter level, then a landscape with a tiled rock material and a water plane is set up.",
+   c:"From an empty starter level to a terrain test bed with material and water.",
+   imgs:[[P+"blockout_landscape.jpg","Landscape material"],[P+"blockout_water.jpg","Water plane"],[P+"blockout_starter.jpg","Starter level","ui"]]},
+  {n:"02", t:"Cave & Temple Structure", s:"implemented",
+   d:"A rocky cave chamber takes shape with columns, steps, a water pool and a seated statue as the focal point — still under bright placeholder light.",
+   c:"Layout of the chamber, columns and altar area established.",
+   imgs:[[P+"cave_layout_a.jpg","Chamber layout"],[P+"cave_layout_b.jpg","Columns & water"],[P+"statue_asset.jpg","Altar statue"]]},
+  {n:"03", t:"Materials & Foliage", s:"implemented",
+   d:"Cave rock materials and reusable material functions are built, and foliage assets are brought into the chamber.",
+   c:"Grey geometry turned into weathered rock and vegetation.",
+   imgs:[[P+"cave_foliage.jpg","Cave with foliage"],[P+"materials_function.jpg","Material function","ui"],[P+"cave_materials_list.jpg","Cave materials","ui"]]},
+  {n:"04", t:"Lighting & Atmosphere", s:"implemented",
+   d:"Directional light, exponential height fog, sky atmosphere, sky light and volumetric cloud replace the flat light. The cave becomes dark blue with shafts of light; the river fills with fog.",
+   c:"Flat, washed-out scenes gained depth and a distinct tone.",
+   imgs:[[P+"lighting_dark.jpg","Cold light shafts"],[P+"lighting_fog_river.jpg","Fog over the river"],[P+"cave_water_dark.jpg","Cave water"]]},
+  {n:"05", t:"The Forest Map", s:"implemented",
+   d:"A separate forest level is built with dense trees, backdrop forest walls, golden light, god rays and a river, with particles drifting through the air.",
+   c:"A second, warm world to contrast the cold cave.",
+   imgs:[[P+"forest_map_rays.jpg","God rays"],[P+"forest_map_aerial.jpg","From above"],[P+"forest_map_river.jpg","River bank"]]},
+  {n:"06", t:"VR Interaction & Android Build", s:"implemented",
+   d:"VR framework Blueprints with a teleport visualizer are added, a teleport trace is driven by an input action, and the project is configured for Android packaging.",
+   c:"A scene became an explorable, packaged VR experience.",
+   imgs:[[P+"vr_blueprints.jpg","VR Blueprints","ui"],[P+"vr_teleport_bp.jpg","Teleport graph","ui"],[P+"android_packaging.jpg","Android packaging","ui"]]}
+];
+
+const CITY = {
+  d:"Alongside the forest and cave, a separate <b style=\"color:var(--text);font-weight:500\">City</b> level was built: an overgrown, abandoned urban environment. It is shown here as an experiment beside the main world.",
+  imgs:[[P+"city_a.jpg","City level — overgrown streets"],[P+"city_b.jpg","City level — rooftops"],[P+"city_c.jpg","City level — canal & pipes"]]
+};
+
+const EVID = [
+  [P+"materials_nodes.jpg","Tiling in the material graph","Tiling and offset inputs feed the texture coordinates, breaking up the repeating pattern.","ui"],
+  [P+"vr_teleport_bp.jpg","Teleport in Blueprints","An input action starts a teleport trace, then tries the teleport on release.","ui"],
+  [P+"android_packaging.jpg","Android packaging","APK settings with minimum SDK 29, target SDK 34 and game data packaged inside.","ui"]
+];
+
+/* ==========================================================================
+   C. HELPERS
+   ========================================================================== */
+const $  = (s,c=document)=>c.querySelector(s);
+const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+const ORN_SVG = '<svg viewBox="0 0 400 400" fill="none" aria-hidden="true"><g stroke="#c9922a" stroke-width=".6"><circle cx="200" cy="200" r="190"/><circle cx="200" cy="200" r="140"/><circle cx="200" cy="200" r="90"/><polygon points="200,15 380,315 20,315"/><polygon points="200,385 380,85 20,85"/></g></svg>';
+function frame(img, cls=""){
+  const [path,cap,ui] = img;
+  return `<figure class="frame ${ui?'ui':''} ${cls}" data-path="${path}"><i class="corner tl"></i><i class="corner br"></i><img src="${path}" alt="${cap}" loading="lazy"><figcaption>${cap}</figcaption></figure>`;
+}
+function ornament(label, sub, cls=""){
+  return `<figure class="frame orn ${cls}">${ORN_SVG}<div class="o">${label}<small>${sub}</small></div></figure>`;
+}
+/* main image + small thumbnails */
+function set(imgs, label, sub, cls="r43"){
+  if(!imgs.length) return ornament(label, sub, cls);
+  const [m,...rest]=imgs;
+  return frame(m,cls)+(rest.length?`<div class="thumbs">${rest.map(i=>frame(i,'')).join('')}</div>`:'');
+}
+function fillBadges(root){
+  $$('.badge',root).forEach(b=>{const k=b.dataset.status||'workflow'; b.textContent=CONFIG.statusLabels[k]||k;});
+}
+function armImages(root=document){
+  $$('.frame img',root).forEach(img=>{
+    const f=img.closest('.frame'); const bad=()=>f.classList.add('missing');
+    img.addEventListener('error',bad);
+    if(img.complete && img.naturalWidth===0) bad();
+  });
+}
+
+/* ==========================================================================
+   D. BUILD CONTENT
+   ========================================================================== */
+(function build(){
+  /* Concept timeline */
+  const rail=$('#tlRail'), txt=$('#tlTxt'), imgs=$('#tlImgs');
+  STAGES.forEach((s,i)=>{
+    rail.insertAdjacentHTML('beforeend',`<button type="button" data-i="${i}"><i></i>${s.k}</button>`);
+    imgs.insertAdjacentHTML('beforeend',`<div class="tl-set">${set(s.imgs,s.k,'STAGE '+String(i+1).padStart(2,'0'))}</div>`);
+  });
+  let cur=0;
+  function show(i){
+    cur=(i+STAGES.length)%STAGES.length; const s=STAGES[cur];
+    $$('button',rail).forEach((b,j)=>b.classList.toggle('on',j===cur));
+    $$('.tl-set',imgs).forEach((f,j)=>f.classList.toggle('on',j===cur));
+    txt.innerHTML=`<div class="n">STAGE ${String(cur+1).padStart(2,'0')} / ${STAGES.length} &nbsp; <span class="badge" data-status="${s.s}"></span></div>
+      <h3>${s.t}</h3><p style="color:var(--muted)">${s.d}</p>
+      <div class="ach"><b>WHAT WAS ACHIEVED</b>${s.a}</div>`;
+    fillBadges(txt);
+  }
+  rail.addEventListener('click',e=>{const b=e.target.closest('button'); if(b) show(+b.dataset.i);});
+  $('#tlPrev').onclick=()=>show(cur-1); $('#tlNext').onclick=()=>show(cur+1);
+  show(0);
+
+  /* 14-stage workflow */
+  const wf=$('#wf');
+  WF.forEach((w,i)=>{
+    const n=String(i+1).padStart(2,'0');
+    const media = w[2] ? frame(w[2],'r43') : ornament(n,'WORKFLOW STAGE','r43');
+    wf.insertAdjacentHTML('beforeend',`<div class="wf-item rv ${i%2?'d1':''}">${media}
+      <div><div class="no">${n}</div><h4>${w[0].toUpperCase()}</h4><p>${w[1]}</p></div></div>`);
+  });
+
+  /* development journey */
+  const jr=$('#journey');
+  JOURNEY.forEach(j=>{
+    jr.insertAdjacentHTML('beforeend',`<div class="jr rv">
+      <div class="jr-media">${set(j.imgs,'','', '')}</div>
+      <div><div class="st">STAGE ${j.n} &nbsp; <span class="badge" data-status="${j.s}"></span></div><h4>${j.t}</h4>
+      <p style="color:var(--muted)">${j.d}</p><div class="chg"><b>WHAT CHANGED</b>${j.c}</div></div></div>`);
+  });
+
+  /* city experiment */
+  $('#cityExp').innerHTML=`<div class="exp-in"><div><div class="kicker" style="margin-bottom:.8rem">Beyond the main world &nbsp; <span class="badge" data-status="experiment"></span></div>
+    <h3 class="sub">Urban Ruins — City Level</h3><p style="color:var(--muted);margin:0">${CITY.d}</p></div>
+    <div class="thumbs">${CITY.imgs.map(i=>frame(i,'r43')).join('')}</div></div>`;
+
+  /* reflection evidence */
+  $('#evid').innerHTML=EVID.map(e=>`<figure class="card rv">${frame([e[0],e[1],e[3]],'')}<b>${e[1].toUpperCase()}</b><p>${e[2]}</p></figure>`).join('');
+
+  fillBadges(document);
+  armImages();
+})();
+
+/* ==========================================================================
+   E. NAV, PROGRESS, ACTIVE SECTION, BACK-TO-TOP
+   ========================================================================== */
+const nav=$('#nav'), prog=$('#progress'), toTop=$('#toTop');
+function onScroll(){
+  const y=scrollY, h=document.documentElement.scrollHeight-innerHeight;
+  prog.style.width=(y/h*100)+'%';
+  nav.classList.toggle('show', y>innerHeight*.6);
+  toTop.classList.toggle('show', y>innerHeight*1.2);
+  if(y<innerHeight*1.2) $$('[data-parallax]').forEach(el=>{el.style.transform=`translate3d(0,${y*parseFloat(el.dataset.parallax)}px,0)`;});
+}
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+toTop.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+
+const links=$$('nav.top a.l');
+new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){
+    links.forEach(a=>{const on=a.getAttribute('href')==='#'+e.target.id; a.classList.toggle('active',on);
+      if(on) a.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});});
+  }
+}),{rootMargin:'-45% 0px -50% 0px'}).observe && $$('section.chapter').forEach(s=>{
+  new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting) links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));
+  }),{rootMargin:'-45% 0px -50% 0px'}).observe(s);
+});
+
+/* ==========================================================================
+   F. SCROLL REVEAL
+   ========================================================================== */
+const rvObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); rvObs.unobserve(e.target);}}),{threshold:.12});
+$$('.rv').forEach(el=>rvObs.observe(el));
+
+/* ==========================================================================
+   G. COVER: hero image + floating dust
+   ========================================================================== */
+(function hero(){
+  const im=new Image(); im.onload=()=>{const h=$('#heroImg'); h.style.backgroundImage=`url(${im.src})`; h.classList.add('ok');};
+  im.src='assets/hero/hero_bg.jpg';   // [EDIT:IMAGE]
+  const c=$('#dust'), x=c.getContext('2d'); let W,H,Pt=[];
+  function size(){W=c.width=c.offsetWidth; H=c.height=c.offsetHeight; Pt=Array.from({length:Math.min(90,W/16)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,vx:(Math.random()-.5)*.15,vy:-Math.random()*.25-.05,a:Math.random()*.5+.15}));}
+  size(); addEventListener('resize',size);
+  let run=true; new IntersectionObserver(e=>run=e[0].isIntersecting).observe(c);
+  (function tick(){
+    if(run){x.clearRect(0,0,W,H);
+      Pt.forEach(p=>{p.x+=p.vx;p.y+=p.vy; if(p.y<-5){p.y=H+5;p.x=Math.random()*W;} if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+        x.beginPath(); x.arc(p.x,p.y,p.r,0,7); x.fillStyle=`rgba(240,184,74,${p.a})`; x.shadowBlur=8; x.shadowColor='rgba(240,184,74,.7)'; x.fill();});}
+    requestAnimationFrame(tick);
+  })();
+})();
+
+/* ==========================================================================
+   H. LIGHTBOX (all loaded images, arrow keys)
+   ========================================================================== */
+(function lightbox(){
+  const lb=$('#lb'), im=$('#lbImg'), cap=$('#lbCap'); let list=[], idx=0;
+  const ok=f=>!f.classList.contains('missing') && !f.classList.contains('orn') && f.querySelector('img') && f.querySelector('img').naturalWidth>0 && f.offsetParent!==null;
+  function open(f){ list=$$('.frame').filter(ok); idx=Math.max(0,list.indexOf(f)); paint(); lb.classList.add('open'); document.body.style.overflow='hidden'; }
+  function paint(){const f=list[idx]; if(!f)return; const i=f.querySelector('img'); im.src=i.currentSrc||i.src; cap.textContent=(f.querySelector('figcaption')||{}).textContent||i.alt;}
+  function close(){lb.classList.remove('open'); document.body.style.overflow='';}
+  function step(d){idx=(idx+d+list.length)%list.length; paint();}
+  document.addEventListener('click',e=>{const f=e.target.closest('.frame'); if(f && ok(f)) open(f);});
+  $('.x',lb).onclick=close; $('.p',lb).onclick=()=>step(-1); $('.n',lb).onclick=()=>step(1);
+  lb.addEventListener('click',e=>{if(e.target===lb)close();});
+  addEventListener('keydown',e=>{
+    if(lb.classList.contains('open')){ if(e.key==='Escape')close(); if(e.key==='ArrowLeft')step(-1); if(e.key==='ArrowRight')step(1); }
+    else if(e.key==='f'||e.key==='F') toggleFS();
+  });
+})();
+
+/* ==========================================================================
+   I. FULLSCREEN
+   ========================================================================== */
+function toggleFS(){ if(!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); }
+$('#fsBtn').onclick=toggleFS;
+</script>
+</body>
+</html>
